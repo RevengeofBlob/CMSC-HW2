@@ -1,0 +1,16 @@
+#intro{
+    text-align: center;
+}
+#start{
+    text-align: center;
+    font-size: 100px;
+}
+#verticalCenter{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width:10rem;
+    height:10rem;
+}
