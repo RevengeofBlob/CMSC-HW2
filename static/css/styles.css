@@ -8,6 +8,17 @@
 #clock{
     text-align: center;
 }
+#gameSpace{
+    width: 150rem;
+    height: 70rem;
+}
+#circle{
+    width: 10rem;
+    height: 10rem;
+    background-color: black;
+    border-radius: 50%;
+    position: relative;
+}
 #verticalCenter{
     margin: 0;
     position: absolute;
