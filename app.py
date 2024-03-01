@@ -1,5 +1,6 @@
 import sqlite3
 import random
+import time
 from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
@@ -22,7 +23,7 @@ def index():
         #Create a new user in db if name doesn't exist
         if len(results) == 0:
             #Loop until unique id is found
-            randID = str(random.randint(0, 1000));
+            randID = random.randint(0, 1000);
             query = f"SELECT * FROM users where id= {randID}"
             cursor.execute(query)
             results = cursor.fetchall()
@@ -33,12 +34,16 @@ def index():
                 results = cursor.fetchall()
 
             #Add user to the database
-            cursor.execute("INSERT INTO users VALUES ('"+name+"', '"+randID+"', '"+points+"')")
+            insert = f"INSERT INTO users VALUES ('{name}', {randID}, {points})"
+            cursor.execute(insert)
+            #cursor.execute("INSERT INTO users VALUES ('"+name+"', '"+randID+"', '"+points+"')")
             connection.commit()
         else:
             #Update the user's score if the new score is higher
             if results[0][0] < points:
-                cursor.execute("UPDATE users SET Points='"+points+"' WHERE name= '"+name+"'")
+                update = f"UPDATE users SET Points= {points} WHERE name= '{name}')"
+                cursor.execute(update)
+                #cursor.execute("UPDATE users SET Points='"+points+"' WHERE name= '"+name+"'")
                 connection.commit()
         return redirect(url_for('leaderboard'))
     
@@ -48,9 +53,8 @@ def index():
 def leaderboard():
     connection = sqlite3.connect('user_info.db')
     cursor = connection.cursor()
-    query = "SELECT name,points FROM users ORDER BY Points DESC LIMIT 10"
-    cursor.execute(query)
-    result = cursor.fetchall()
+
+    result = getBoard()
 
     if request.method == 'POST':
         name = request.form['name']
@@ -66,4 +70,15 @@ def leaderboard():
             cursor.execute(query)
             connection.commit()
 
+            result = getBoard()
+            return render_template('leaderboard.html', result=result)
+
     return render_template('leaderboard.html', result=result)
+
+def getBoard():
+    connection = sqlite3.connect('user_info.db')
+    cursor = connection.cursor()
+    query = "SELECT name,points FROM users ORDER BY Points DESC LIMIT 10"
+    cursor.execute(query)
+    result = cursor.fetchall()
+    return result
