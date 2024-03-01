@@ -6,7 +6,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         document.getElementById('start').style.display='none';
 
         //Countdown timer
-        let timeAlloted = 5;
+        let timeAlloted = 30;
         document.getElementById('clock').innerHTML = timeAlloted;
         const timer = setInterval(function(){
             timeAlloted--;
