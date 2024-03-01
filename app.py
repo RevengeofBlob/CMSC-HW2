@@ -51,4 +51,19 @@ def leaderboard():
     query = "SELECT name,points FROM users ORDER BY Points DESC LIMIT 10"
     cursor.execute(query)
     result = cursor.fetchall()
+
+    if request.method == 'POST':
+        name = request.form['name']
+        #Search if the user exists
+        query = "SELECT Name FROM users where name= '"+name+"'"
+        cursor.execute(query)
+        
+        results = cursor.fetchall()
+
+        #Remove the user from db if they exist
+        if len(results) != 0:
+            query = "DELETE FROM users WHERE name= '"+name+"'"
+            cursor.execute(query)
+            connection.commit()
+
     return render_template('leaderboard.html', result=result)
