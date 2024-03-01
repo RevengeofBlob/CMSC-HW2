@@ -1,6 +1,6 @@
 import sqlite3
 import random
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -40,5 +40,15 @@ def index():
             if results[0][0] < points:
                 cursor.execute("UPDATE users SET Points='"+points+"' WHERE name= '"+name+"'")
                 connection.commit()
-        
+        return redirect(url_for('leaderboard'))
+    
     return render_template('index.html')
+
+@app.route('/leaderboard', methods=['GET', 'POST'])
+def leaderboard():
+    connection = sqlite3.connect('user_info.db')
+    cursor = connection.cursor()
+    query = "SELECT name,points FROM users ORDER BY Points DESC LIMIT 10"
+    cursor.execute(query)
+    result = cursor.fetchall()
+    return render_template('leaderboard.html', result=result)

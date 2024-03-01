@@ -64,6 +64,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         points.setAttribute('value', score);
 
         const br = document.createElement('br')
+
         sendInfo.append(insertInfo);
         sendInfo.append(br);
         sendInfo.append(submission);
